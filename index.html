@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Türk Bilim İnsanları</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #f39c12, #e74c3c, #f39c12);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 200% center; }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 100%;
+            height: 420px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .flip-card-front {
+            background: linear-gradient(145deg, #2d3436 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .flip-card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(243, 156, 18, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .scientist-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #f39c12;
+            box-shadow: 0 0 30px rgba(243, 156, 18, 0.4);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .flip-card:hover .scientist-image {
+            transform: scale(1.05);
+        }
+
+        .scientist-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #f39c12;
+            padding: 0 20px;
+        }
+
+        .scientist-era {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(145deg, #1a1a2e 0%, #2d3436 100%);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .flip-card-back h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: #f39c12;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .flip-card-back p {
+            font-size: 0.95rem;
+            color: #d0d0d0;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        .achievements {
+            margin-top: 20px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .achievements li {
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            list-style: none;
+        }
+
+        .achievements li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: #f39c12;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 40px;
+        }
+
+        .footer span {
+            color: #f39c12;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cards-container {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .flip-card {
+                height: 380px;
+            }
+
+            .scientist-image {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        /* Decorative elements */
+        .decoration {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .decoration-1 {
+            top: -150px;
+            right: -150px;
+        }
+
+        .decoration-2 {
+            bottom: -150px;
+            left: -150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+
+    <section class="hero">
+        <h1>🌟 Türk Bilim İnsanları 🌟</h1>
+        <p>Tarih boyunca dünyaya ışık olmuş, bilim ve teknoloji alanında çığır açan Türk ve İslam bilim insanlarının mirasını keşfedin. Her bir kart, bir dehanın hikayesini anlatıyor.</p>
+    </section>
+
+    <div class="cards-container">
+        <!-- Lagari Hasan Çelebi -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Lagari_Hasan_%C3%87elebi.jpg/220px-Lagari_Hasan_%C3%87elebi.jpg" alt="Lagari Hasan Çelebi" class="scientist-image" onerror="this.src='https://via.placeholder.com/180x180/2d3436/f39c12?text=LHC'">
+                    <h2 class="scientist-name">Lagari Hasan Çelebi</h2>
+                    <p class="scientist-era">17. Yüzyıl • Osmanlı</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🚀 İlk Roket Uçuşu</h3>
+                    <p>Dünya tarihinin ilk roketli uçuşunu gerçekleştiren Osmanlı mühendisi.</p>
+                    <ul class="achievements">
+                        <li>1633 yılında Sultan IV. Murad'ın kızı doğumu şerefine roketle uçtu</li>
+                        <li>İstanbul Boğazı üzerinde yaklaşık 300 metre yükseldi</li>
+                        <li>Paraşüt benzeri bir sistemle güvenli şekilde indi</li>
+                        <li>Havacılık tarihinin öncülerinden kabul edilir</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- El Cezeri -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Al-Jazari_-_elephant_clock.jpg/220px-Al-Jazari_-_elephant_clock.jpg" alt="El Cezeri" class="scientist-image" onerror="this.src='https://via.placeholder.com/180x180/2d3436/f39c12?text=EC'">
+                    <h2 class="scientist-name">El Cezeri</h2>
+                    <p class="scientist-era">1136-1206 • İslam Altın Çağı</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>⚙️ Sibernetiğin Babası</h3>
+                    <p>Mekanik mühendisliğin ve otomasyonun kurucusu kabul edilir.</p>
+                    <ul class="achievements">
+                        <li>50'den fazla mekanik cihaz tasarladı</li>
+                        <li>Fil Saati gibi ünlü otomatlar yaptı</li>
+                        <li>"El-Cami Beyn'il-İlm Vel-Amel" adlı eser yazdı</li>
+                        <li>Modern robotiğin temellerini attı</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ibnül Heysem -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Ibn_al-Haytham.png/220px-Ibn_al-Haytham.png" alt="Ibnül Heysem" class="scientist-image" onerror="this.src='https://via.placeholder.com/180x180/2d3436/f39c12?text=IH'">
+                    <h2 class="scientist-name">Ibnül Heysem</h2>
+                    <p class="scientist-era">965-1040 • İslam Altın Çağı</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🔬 Optik Biliminin Kurucusu</h3>
+                    <p>Modern optik biliminin ve bilimsel metodun öncüsü.</p>
+                    <ul class="achievements">
+                        <li>"Kitabül Menazır" (Optik Kitabı) yazdı</li>
+                        <li>Işığın kırılma ve yansıma yasalarını açıkladı</li>
+                        <li>Karanlık oda (camera obscura) prensibini keşfetti</li>
+                        <li>Göz anatomisi üzerine çalışmalar yaptı</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Uluğ Bey -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Ulugh_Beg.jpg/220px-Ulugh_Beg.jpg" alt="Uluğ Bey" class="scientist-image" onerror="this.src='https://via.placeholder.com/180x180/2d3436/f39c12?text=UB'">
+                    <h2 class="scientist-name">Uluğ Bey</h2>
+                    <p class="scientist-era">1394-1449 • Timur İmparatorluğu</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>⭐ Büyük Astronom</h3>
+                    <p>Orta Çağ'ın en büyük astronomlarından biri.</p>
+                    <ul class="achievements">
+                        <li>Semerkant'ta devasa rasathane kurdu</li>
+                        <li>"Zic-i Sultani" adlı yıldız kataloğu hazırladı</li>
+                        <li>1000'den fazla yıldızın konumunu belirledi</li>
+                        <li>Dünya ekseninin eğimini hassas hesapladı</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ali Kuşçu -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Ali_Qushji.jpg/220px-Ali_Qushji.jpg" alt="Ali Kuşçu" class="scientist-image" onerror="this.src='https://via.placeholder.com/180x180/2d3436/f39c12?text=AK'">
+                    <h2 class="scientist-name">Ali Kuşçu</h2>
+                    <p class="scientist-era">1403-1474 • Osmanlı</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🌙 Astronomi ve Matematik Dehası</h3>
+                    <p>Osmanlı'nın en büyük bilim insanlarından.</p>
+                    <ul class="achievements">
+                        <li>Uluğ Bey'in öğrencisi ve çalışma arkadaşı</li>
+                        <li>Ay'ın haritasını çıkardı</li>
+                        <li>Matematik ve astronomi üzerine eserler yazdı</li>
+                        <li>İstanbul'da ilk medreseleri kurdu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ahmed Yüksel Özemre -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=AYO" alt="Ahmed Yüksel Özemre" class="scientist-image">
+                    <h2 class="scientist-name">Ahmed Yüksel Özemre</h2>
+                    <p class="scientist-era">1914-1998 • Modern Türkiye</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>⚛️ Nükleer Fizikçi</h3>
+                    <p>Türkiye'nin nükleer fizik alanındaki öncü isimlerinden.</p>
+                    <ul class="achievements">
+                        <li>Nükleer fizik alanında doktora yaptı</li>
+                        <li>İstanbul Teknik Üniversitesi'nde görev yaptı</li>
+                        <li>Bilim felsefesi üzerine çalışmalar yaptı</li>
+                        <li>Çok sayıda bilimsel makale yayınladı</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- İsmail Akbay -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=IA" alt="İsmail Akbay" class="scientist-image">
+                    <h2 class="scientist-name">İsmail Akbay</h2>
+                    <p class="scientist-era">1935-2012 • Türk-Amerikan</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🚀 Roket Bilimcisi</h3>
+                    <p>NASA'da görev yapan Türk roket bilimcisi.</p>
+                    <ul class="achievements">
+                        <li>NASA'da Apollo programında çalıştı</li>
+                        <li>Ay'a iniş projelerinde görev aldı</li>
+                        <li>Roket motorları üzerine uzmanlaştı</li>
+                        <li>Türk gençlerine bilim ilhamı verdi</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sait Akpınar -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=SA" alt="Sait Akpınar" class="scientist-image">
+                    <h2 class="scientist-name">Sait Akpınar</h2>
+                    <p class="scientist-era">Modern Dönem • Türkiye</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🔬 Bilim İnsanı</h3>
+                    <p>Türkiye'de bilimsel araştırmalara katkı sağlayan değerli bilim insanı.</p>
+                    <ul class="achievements">
+                        <li>Akademik alanda önemli çalışmalar yaptı</li>
+                        <li>Bilim eğitimine katkı sağladı</li>
+                        <li>Araştırma projelerinde görev aldı</li>
+                        <li>Genç nesillere örnek oldu</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aslı Erdoğan -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=AE" alt="Aslı Erdoğan" class="scientist-image">
+                    <h2 class="scientist-name">Aslı Erdoğan</h2>
+                    <p class="scientist-era">1962- • Modern Türkiye</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>⚛️ Fizikçi ve Yazar</h3>
+                    <p>Parçacık fiziği alanında çalışmış, ödüllü yazar.</p>
+                    <ul class="achievements">
+                        <li>CERN'de parçacık fiziği üzerine çalıştı</li>
+                        <li>Rio de Janeiro Federal Üniversitesi'nde görev yaptı</li>
+                        <li>Çok sayıda edebi eser yazdı</li>
+                        <li>Uluslararası ödüller kazandı</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aycan Yurtsever -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=AY" alt="Aycan Yurtsever" class="scientist-image">
+                    <h2 class="scientist-name">Aycan Yurtsever</h2>
+                    <p class="scientist-era">1984- • Modern Türkiye</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🌌 Kuantum Fizikçisi</h3>
+                    <li>Max Planck Enstitüsü'nde araştırma yapıyor</li>
+                    <ul class="achievements">
+                        <li>Kuantum optik ve kuantum bilgi üzerine çalışıyor</li>
+                        <li>Vienna Üniversitesi'nde doktora yaptı</li>
+                        <li>Uluslararası dergilerde makaleleri yayımlandı</li>
+                        <li>Genç kadın bilimciler için rol model</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canan Dağdeviren -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=CD" alt="Canan Dağdeviren" class="scientist-image">
+                    <h2 class="scientist-name">Canan Dağdeviren</h2>
+                    <p class="scientist-era">1985- • Modern Türkiye</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>💡 Yenilikçi Mühendis</h3>
+                    <li>MIT'de profesör, Forbes 30 Under 30 listesinde</li>
+                    <ul class="achievements">
+                        <li>Esnek elektronik cihazlar geliştiriyor</li>
+                        <li>Kalp pili teknolojilerinde çığır açtı</li>
+                        <li>Harvard ve MIT'de araştırma yaptı</li>
+                        <li>Çok sayıda patent sahibi</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feza Gürsey -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=FG" alt="Feza Gürsey" class="scientist-image">
+                    <h2 class="scientist-name">Feza Gürsey</h2>
+                    <p class="scientist-era">1921-1992 • Türk-Amerikan</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🌠 Teorik Fizikçi</h3>
+                    <li>Parçacık fiziği alanında dünyaca ünlü</li>
+                    <ul class="achievements">
+                        <li>Yale Üniversitesi'nde profesördü</li>
+                        <li>Chiral Simetri teorisine katkı yaptı</li>
+                        <li>TÜBİTAK Bilim Ödülü aldı</li>
+                        <li>Uluslararası alanda saygı gördü</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mete Atatüre -->
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <img src="https://via.placeholder.com/180x180/2d3436/f39c12?text=MA" alt="Mete Atatüre" class="scientist-image">
+                    <h2 class="scientist-name">Mete Atatüre</h2>
+                    <p class="scientist-era">1974- • Modern Türkiye</p>
+                </div>
+                <div class="flip-card-back">
+                    <h3>🔬 Kuantum Fizikçisi</h3>
+                    <li>Cambridge Üniversitesi'nde profesör</li>
+                    <ul class="achievements">
+                        <li>Kuantum optik alanında uzman</li>
+                        <li>Ernst Abbe Ödülü sahibi</li>
+                        <li>Max Planck Enstitüsü'nde çalıştı</li>
+                        <li>Uluslararası dergilerde yayınları var</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>🌟 <span>Türk Bilim İnsanları</span> - Bilim ve Teknoloji Mirasımız 🌟</p>
+        <p style="margin-top: 10px; color: #555;">Gelecek, bugünün bilim insanlarında şekillenecek...</p>
+    </footer>
+</body>
+</html>
